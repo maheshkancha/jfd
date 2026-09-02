@@ -56,10 +56,40 @@
     embedded color-space="sRGB" renderer="colorManagement: true; physicallyCorrectLights: true"
     vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
 
+    <a-assets>
+      <!-- 
+        AUDIO ASSETS SPECIFICATION:
+        Place these audio files in your project directory next to index.html.
+        You can use standard .mp3 or .wav formats.
+      -->
+      <!-- Continuous atmospheric background theme (Rain, storm, or flute) -->
+      <!-- <audio id="bg-thunder-theme" src="ambient_storm_theme.mp3" preload="auto"></audio> -->
+
+      <!-- Voiceover / SFX clips mapped to respective storyline intervals -->
+      <audio id="audio-step1" src="narration_mathura.wav" preload="auto"></audio>
+      <audio id="audio-step2" src="narration_krishna_born.wav" preload="auto"></audio>
+      <audio id="audio-step3" src="narration_safety.wav" preload="auto"></audio>
+      <audio id="audio-step4" src="narration_yamuna.wav" preload="auto"></audio>
+      <audio id="audio-step5" src="narration_sheshnag.wav" preload="auto"></audio>
+      <audio id="audio-step6" src="narration_gokul.wav" preload="auto"></audio>
+      <audio id="audio-step7" src="narration_greetings.wav" preload="auto"></audio>
+
+      <!-- Positional Lightning crack audio effect -->
+      <audio id="audio-lightning" src="lightning_crack.mp3" preload="auto"></audio>
+    </a-assets>
+
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <a-entity mindar-image-target="targetIndex: 0" id="ar-target">
-      <!-- Target index 0 matches the compilation sequence profile inside your .mind matrix -->
+
+      <!-- AUDIO PLAYER ENTITIES -->
+      <!-- Ambient ambient track loops continuously when target is visible -->
+      <a-sound id="sound-bg" src="#bg-thunder-theme" loop="true" volume="0.4" autoplay="false"></a-sound>
+      <a-sound id="sound-narration" volume="2.0"></a-sound>
+      <!-- Specific lightning thunder clap impact channel -->
+      <a-sound id="sound-sfx" src="#audio-lightning" volume="1.5"></a-sound>
+
+
       <!-- Global Ambient Lighting system controlled dynamically via intervals -->
       <a-light id="ambient-light" type="ambient" color="#444444" intensity="1.0"></a-light>
 
@@ -71,32 +101,26 @@
         material="opacity: 0.5; transparent: true; shader: flat;">
       </a-circle>
 
-      <!-- STEP 3+: Divine Glow (Baby Krishna Placeholder) -->
+      <!-- Divine Glow (Baby Krishna Placeholder) -->
       <a-circle id="divine-glow" position="0 0 0.01" radius="0.4" color="#FFD700" visible="false"
         material="shader: flat; opacity: 0.7; transparent: true;"
         animation="property: scale; from: 1 1 1; to: 1.2 1.2 1; dur: 1000; dir: alternate; easing: easeInOutSine; loop: true;">
       </a-circle>
 
-      <!-- STEP 4+: Yamuna Water Backdrop (Blue Circle behind Krishna) -->
-      <a-circle id="yamuna-water" position="0 -0.1 -0.05" radius="3" color="#1E90FF" visible="false"
+      <!-- Yamuna Water Backdrop -->
+      <a-circle id="yamuna-water" position="0 -0.1 -0.25" radius="4" color="#1E90FF" visible="false"
         material="shader: flat; opacity: 0.4; transparent: true;"
         animation="property: rotation; from: 0 0 0; to: 0 0 360; dur: 10000; easing: linear; loop: true;">
       </a-circle>
 
-      <!-- STEP 5+: Sheshnag Umbrella -->
-      <a-entity position="0 3 0" scale="2 2 2" rotation="0 0 0" gltf-model="url(./models/sheshnag.glb);">
+      <!-- Sheshnag Umbrella -->
+      <a-entity position="0 2 0" scale="2 2 2" rotation="0 0 0" gltf-model="url(./models/sheshnag.glb);">
       </a-entity>
-      <!-- <a-torus-knot id="sheshnag-umbrella" position="0 0.4 0" radius="0.15" radius-tubular="0.03" color="#228B22"
-        visible="false"
-        animation="property: rotation; from: 0 0 0; to: 0 360 0; dur: 4000; easing: linear; loop: true;">
-      </a-torus-knot> -->
 
-      <!-- STEP 7: Floating Lotus (Pink Sphere) -->
-      <a-entity position="0 -2 0" scale="2 2 2" rotation="0 0 0" gltf-model="url(./models/lotus.glb);">
+      <!-- Floating Lotus -->
+      <a-entity position="0 -2.5 0" scale="2 2 2" rotation="0 0 0" gltf-model="url(./models/lotus.glb);">
       </a-entity>
-      <!-- <a-sphere id="floating-lotus" position="-0.35 -0.25 0" radius="0.08" color="#FF69B4" visible="false"
-        animation="property: position; from: -0.35 -0.25 0; to: -0.35 -0.15 0; dur: 1500; dir: alternate; easing: easeInOutSine; loop: true;">
-      </a-sphere> -->
+
     </a-entity>
 
   </a-scene>
@@ -115,16 +139,42 @@
     const sheshnagUmbrella = document.querySelector("#sheshnag-umbrella");
     const floatingLotus = document.querySelector("#floating-lotus");
 
+    // Audio System Components
+    const soundBg = document.querySelector("#sound-bg");
+    const soundNarration = document.querySelector("#sound-narration");
+    const soundSfx = document.querySelector("#sound-sfx");
+
     // Runtime State Engine Properties
     let timelineInterval = null;
     let lightningInterval = null;
     let startTime = null;
     let rainGenerated = false;
+    let lastPlayedStep = -1;
 
     // Calculates current timeline runtime state
     const getElapsedSeconds = () => {
       if (!startTime) return 0;
       return (Date.now() - startTime) / 1000;
+    };
+
+    // Triggers fresh voiceover file only when step state increments
+    const playNarrationAudio = (step) => {
+      if (step === lastPlayedStep) return;
+      lastPlayedStep = step;
+
+      // Stop any ongoing narration immediately before switching clips
+      soundNarration.components.sound.stopSound();
+
+      if (step >= 1 && step <= 7) {
+        // Dynamically route the audio pool selector ID
+        // soundNarration.setAttribute("src", `#audio-step1`);
+        soundNarration.setAttribute("src", `#audio-step${step}`);
+
+        // Allow elements a microscopic pause to register the attribute buffer switch safely
+        setTimeout(() => {
+          soundNarration.components.sound.playSound();
+        }, 10);
+      }
     };
 
     // Generates structural procedural rain grid loop
@@ -198,6 +248,10 @@
     const onFound = () => {
       console.log("🎯 Vasudeva target found!");
       startTime = Date.now();
+      
+      lastPlayedStep = -1;
+      // Start ambient loop track smoothly
+      soundBg.components.sound.playSound()
 
       // Run the state timeline clock every 100ms for accurate transitions
       timelineInterval = setInterval(() => {
@@ -229,8 +283,10 @@
           clearInterval(lightningInterval);
           text = "Journey Complete. Rescan to replay.";
           currentStep = 0;
+          soundBg.components.sound.stopSound();
         }
         narrationOverlay.innerText = text;
+        playNarrationAudio(currentStep);
         updateLightingAndVisibility(currentStep, false);
       }, 100);
       // Random Lightning Flash Generator (Runs every 3 seconds)
@@ -239,7 +295,8 @@
         // Active between Step 2 and Step 5 timeline window
         if (elapsed >= 4 && elapsed < 23) {
           if (Math.random() > 0.4) {
-            // Flash On
+            // Flash On Fire thunder sfx track instantly
+            soundSfx.components.sound.playSound();
             updateLightingAndVisibility(null, true);
             // Flash Off
             setTimeout(() => {
@@ -276,10 +333,16 @@
       console.log("❌ Vasudeva target lost!");
       clearInterval(timelineInterval);
       clearInterval(lightningInterval);
+
+      // Silence all active audio lines immediately when target leaves frame
+      soundBg.components.sound.stopSound();
+      soundNarration.components.sound.stopSound();
+      soundSfx.components.sound.stopSound();
+
       narrationOverlay.innerText = "Target lost. Point back at the basket.";
       clearRainGrid();
       updateLightingAndVisibility(0, false);
-
+      lastPlayedStep = -1;
     };
 
     target.addEventListener("targetFound", onFound);

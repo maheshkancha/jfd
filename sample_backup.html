@@ -97,8 +97,7 @@
       </a-circle> -->
 
       <!-- Sheshnag Umbrella -->
-      <a-entity id="sheshnag-umbrella" position="0 2 0" scale="2 2 2" rotation="0 0 0" gltf-model="url(./models/sheshnag.glb);" visible="false">
-      </a-entity>
+      <a-entity position="0 1.8 0" scale="2 2 2" rotation="0 0 0" gltf-model="url(./models/sheshnag.glb);" visible="false"></a-entity>
 
       <!-- Divine Glow -->
       <a-circle id="divine-glow" position="0 1.5 0.01" radius="0.4" color="#FFD700"
@@ -107,17 +106,16 @@
       </a-circle>
 
       <!-- Yamuna Water Backdrop -->
-      <a-circle id="yamuna-water" position="0 -0.75 -0.25" radius="4" color="#1E90FF" visible="false"
+      <a-circle id="yamuna-water" position="0 -1.5 -0.25" radius="4" color="#1E90FF" visible="false"
         material="shader: flat; opacity: 0.4; transparent: true;"
         animation="property: rotation; from: 0 0 0; to: 0 0 360; dur: 10000; easing: linear; loop: true;">
       </a-circle>
 
       <!-- Floating Lotus -->
-      <a-entity class="floating-lotus" position="0 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);" visible="false"></a-entity>
-      <a-entity class="floating-lotus" position="1 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);" visible="false"></a-entity>
-      <a-entity class="floating-lotus" position="-1 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);" visible="false"></a-entity>
-      <a-entity class="floating-lotus" position="0.5 -2.5 0.25" scale="0.5 0.5 0.5" gltf-model="url(./models/lotus.glb);" visible="false"></a-entity>
-
+      <a-entity class="floating-lotus" position="0 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);"></a-entity>
+      <a-entity class="floating-lotus" position="1 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);"></a-entity>
+      <a-entity class="floating-lotus" position="-1 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);"></a-entity>
+      <a-entity class="floating-lotus" position="0.5 -2.5 0.25" scale="0.5 0.5 0.5" gltf-model="url(./models/lotus.glb);"></a-entity>
     </a-entity>
 
   </a-scene>
@@ -229,10 +227,10 @@
       }
 
       // 3. Structural Asset Step Rendering Switches
-      // divineGlow.setAttribute("visible", storyStep >= 3);
-      yamunaWater.setAttribute("visible", storyStep >= 4);
-      sheshnagUmbrella.setAttribute("visible", storyStep >= 5);
-      floatingLotus.setAttribute("visible", storyStep === 7);
+      // divineGlow.setAttribute("visible", storyStep >= 1);
+      yamunaWater.setAttribute("visible", storyStep >= 3);
+      sheshnagUmbrella.setAttribute("visible", storyStep >= 4);
+      floatingLotus.setAttribute("visible", storyStep >= 5);
 
       // 4. Procedural Storm Rain Toggle Lifecycle
       if (storyStep >= 2 && storyStep <= 5) {

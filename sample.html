@@ -134,12 +134,12 @@
     const divineGlow = document.querySelector("#divine-glow");
     const yamunaWater = document.querySelector("#yamuna-water");
     const sheshnagUmbrella = document.querySelector("#sheshnag-umbrella");
-    const floatingLotus = document.querySelector(".floating-lotus");
+    const floatingLotus = document.querySelectorAll(".floating-lotus");
 
     // Audio System Components
-    const soundBg = document.querySelector("#sound-bg");
+    // const soundBg = document.querySelector("#sound-bg");
     const soundNarration = document.querySelector("#sound-narration");
-    const soundSfx = document.querySelector("#sound-sfx");
+    // const soundSfx = document.querySelector("#sound-sfx");
 
     // Runtime State Engine Properties
     let timelineInterval = null;
@@ -232,7 +232,11 @@
       // divineGlow.setAttribute("visible", storyStep >= 3);
       yamunaWater.setAttribute("visible", storyStep >= 4);
       sheshnagUmbrella.setAttribute("visible", storyStep >= 5);
-      floatingLotus.setAttribute("visible", storyStep === 7);
+      // floatingLotus.setAttribute("visible", storyStep === 7);
+
+      floatingLotus.forEach(el => {
+        el.setAttribute("visible", storyStep === 7);
+      });
 
       // 4. Procedural Storm Rain Toggle Lifecycle
       if (storyStep >= 2 && storyStep <= 5) {
@@ -249,7 +253,7 @@
       
       lastPlayedStep = -1;
       // Start ambient loop track smoothly
-      soundBg.components.sound.playSound()
+      // soundBg.components.sound.playSound()
 
       // Run the state timeline clock every 100ms for accurate transitions
       timelineInterval = setInterval(() => {
@@ -278,15 +282,16 @@
           currentStep = 7; text = "Happy Janmashtami! ✨";
         } else if (elapsedSeconds > 30) {
           clearInterval(timelineInterval);
-          clearInterval(lightningInterval);
+          // clearInterval(lightningInterval);
           text = "Journey Complete. Rescan to replay.";
           currentStep = 0;
-          soundBg.components.sound.stopSound();
+          // soundBg.components.sound.stopSound();
         }
         narrationOverlay.innerText = text;
         playNarrationAudio(currentStep);
         updateLightingAndVisibility(currentStep, false);
       }, 100);
+
       // Random Lightning Flash Generator (Runs every 3 seconds)
       lightningInterval = setInterval(() => {
         const elapsed = getElapsedSeconds();
@@ -324,18 +329,18 @@
             }
           }
         }
-      }, 3000);
+      }, 3000);      
     };
 
     const onLost = () => {
       console.log("❌ Vasudeva target lost!");
       clearInterval(timelineInterval);
-      clearInterval(lightningInterval);
+      // clearInterval(lightningInterval);
 
       // Silence all active audio lines immediately when target leaves frame
-      soundBg.components.sound.stopSound();
+      // soundBg.components.sound.stopSound();
       soundNarration.components.sound.stopSound();
-      soundSfx.components.sound.stopSound();
+      // soundSfx.components.sound.stopSound();
 
       narrationOverlay.innerText = "Target lost. Point back at the basket.";
       clearRainGrid();

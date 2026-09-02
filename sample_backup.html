@@ -52,7 +52,7 @@
 
   <!-- AR Scene Container -->
   <a-scene
-    mindar-image="imageTargetSrc: ./hiro-target.mind; autoStart: true; uiLoading: yes; uiScanning: yes; uiError: yes;"
+    mindar-image="imageTargetSrc: ./qr-target.mind; autoStart: true; uiLoading: yes; uiScanning: yes; uiError: yes;"
     embedded color-space="sRGB" renderer="colorManagement: true; physicallyCorrectLights: true"
     vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
 
@@ -97,7 +97,8 @@
       </a-circle> -->
 
       <!-- Sheshnag Umbrella -->
-      <a-entity position="0 1.8 0" scale="2 2 2" rotation="0 0 0" gltf-model="url(./models/sheshnag.glb);" visible="false"></a-entity>
+      <a-entity id="sheshnag-umbrella" position="0 2 0" scale="2 2 2" rotation="0 0 0" gltf-model="url(./models/sheshnag.glb);" visible="false">
+      </a-entity>
 
       <!-- Divine Glow -->
       <a-circle id="divine-glow" position="0 1.5 0.01" radius="0.4" color="#FFD700"
@@ -106,16 +107,16 @@
       </a-circle>
 
       <!-- Yamuna Water Backdrop -->
-      <a-circle id="yamuna-water" position="0 -1.5 -0.25" radius="4" color="#1E90FF" visible="false"
+      <a-circle id="yamuna-water" position="0 -0.75 -0.25" radius="4" color="#1E90FF" visible="false"
         material="shader: flat; opacity: 0.4; transparent: true;"
         animation="property: rotation; from: 0 0 0; to: 0 0 360; dur: 10000; easing: linear; loop: true;">
       </a-circle>
 
       <!-- Floating Lotus -->
-      <a-entity class="floating-lotus" position="0 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);"></a-entity>
-      <a-entity class="floating-lotus" position="1 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);"></a-entity>
-      <a-entity class="floating-lotus" position="-1 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);"></a-entity>
-      <a-entity class="floating-lotus" position="0.5 -2.5 0.25" scale="0.5 0.5 0.5" gltf-model="url(./models/lotus.glb);"></a-entity>
+      <a-entity class="floating-lotus" position="0 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);" visible="false"></a-entity>
+      <a-entity class="floating-lotus" position="1 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);" visible="false"></a-entity>
+      <a-entity class="floating-lotus" position="-1 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);" visible="false"></a-entity>
+      <a-entity class="floating-lotus" position="0.5 -2.5 0.25" scale="0.5 0.5 0.5" gltf-model="url(./models/lotus.glb);" visible="false"></a-entity>
     </a-entity>
 
   </a-scene>
@@ -132,12 +133,12 @@
     const divineGlow = document.querySelector("#divine-glow");
     const yamunaWater = document.querySelector("#yamuna-water");
     const sheshnagUmbrella = document.querySelector("#sheshnag-umbrella");
-    const floatingLotus = document.querySelector(".floating-lotus");
+    const floatingLotus = document.querySelectorAll(".floating-lotus");
 
     // Audio System Components
-    const soundBg = document.querySelector("#sound-bg");
+    // const soundBg = document.querySelector("#sound-bg");
     const soundNarration = document.querySelector("#sound-narration");
-    const soundSfx = document.querySelector("#sound-sfx");
+    // const soundSfx = document.querySelector("#sound-sfx");
 
     // Runtime State Engine Properties
     let timelineInterval = null;
@@ -227,10 +228,14 @@
       }
 
       // 3. Structural Asset Step Rendering Switches
-      // divineGlow.setAttribute("visible", storyStep >= 1);
-      yamunaWater.setAttribute("visible", storyStep >= 3);
-      sheshnagUmbrella.setAttribute("visible", storyStep >= 4);
-      floatingLotus.setAttribute("visible", storyStep >= 5);
+      // divineGlow.setAttribute("visible", storyStep >= 3);
+      yamunaWater.setAttribute("visible", storyStep >= 4);
+      sheshnagUmbrella.setAttribute("visible", storyStep >= 5);
+      // floatingLotus.setAttribute("visible", storyStep === 7);
+
+      floatingLotus.forEach(el => {
+        el.setAttribute("visible", storyStep === 7);
+      });
 
       // 4. Procedural Storm Rain Toggle Lifecycle
       if (storyStep >= 2 && storyStep <= 5) {
@@ -247,7 +252,7 @@
       
       lastPlayedStep = -1;
       // Start ambient loop track smoothly
-      soundBg.components.sound.playSound()
+      // soundBg.components.sound.playSound()
 
       // Run the state timeline clock every 100ms for accurate transitions
       timelineInterval = setInterval(() => {
@@ -276,15 +281,16 @@
           currentStep = 7; text = "Happy Janmashtami! ✨";
         } else if (elapsedSeconds > 30) {
           clearInterval(timelineInterval);
-          clearInterval(lightningInterval);
+          // clearInterval(lightningInterval);
           text = "Journey Complete. Rescan to replay.";
           currentStep = 0;
-          soundBg.components.sound.stopSound();
+          // soundBg.components.sound.stopSound();
         }
         narrationOverlay.innerText = text;
         playNarrationAudio(currentStep);
         updateLightingAndVisibility(currentStep, false);
       }, 100);
+
       // Random Lightning Flash Generator (Runs every 3 seconds)
       lightningInterval = setInterval(() => {
         const elapsed = getElapsedSeconds();
@@ -322,18 +328,18 @@
             }
           }
         }
-      }, 3000);
+      }, 3000);      
     };
 
     const onLost = () => {
       console.log("❌ Vasudeva target lost!");
       clearInterval(timelineInterval);
-      clearInterval(lightningInterval);
+      // clearInterval(lightningInterval);
 
       // Silence all active audio lines immediately when target leaves frame
-      soundBg.components.sound.stopSound();
+      // soundBg.components.sound.stopSound();
       soundNarration.components.sound.stopSound();
-      soundSfx.components.sound.stopSound();
+      // soundSfx.components.sound.stopSound();
 
       narrationOverlay.innerText = "Target lost. Point back at the basket.";
       clearRainGrid();

@@ -4,76 +4,354 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Janmashtami AR Fancy Dress - Target Tracking</title>
+  <title>Janmashtami AR Fancy Dress - Story System</title>
+  <!-- A-Frame CDN -->
   <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <!-- MindAR Image Tracking and A-Frame Compiler CDN -->
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
 
   <style>
-    /* UI overlay for when the experience is loading or tracking is lost */
-    #scanning-overlay {
-      position: fixed;
-      top: 0;
-      left: 0;
+    html,
+    body {
+      margin: 0;
+      padding: 0;
       width: 100%;
       height: 100%;
-      background: rgba(0, 0, 0, 0.7);
-      color: white;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      font-family: sans-serif;
-      pointer-events: none;
+      overflow: hidden;
     }
 
-    .hidden {
-      display: none !important;
+    /* HTML Narrative Subtitles Overlay styled exactly like the original React CSS bundle */
+    #narration-overlay {
+      position: absolute;
+      bottom: 40px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 999;
+      background-color: rgba(10, 15, 30, 0.85);
+      color: #fff;
+      padding: 14px 28px;
+      border-radius: 30px;
+      font-family: 'Segoe UI', Roboto, sans-serif;
+      text-align: center;
+      max-width: 85%;
+      width: max-content;
+      font-size: 18px;
+      font-weight: 500;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(255, 215, 0, 0.3);
+      pointer-events: none;
+      transition: all 0.3s ease;
     }
   </style>
 </head>
 
 <body>
 
-  <a-scene mindar-image="imageTargetSrc: ./test-target.mind; autoStart: true; uiLoading: yes; uiScanning: yes; uiError: yes;"
-    color-space="sRGB"
-    renderer="colorManagement: true; physicallyCorrectLights: true"
-    vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: false">
-    <a-assets timeout="10000">
-      <a-asset-item id="avatarModel" src="https://cdn.jsdelivr.net/gh/hiukim/mind-ar-js@1.2.5/examples/image-tracking/assets/card-example/softmind/scene.gltf"></a-asset-item>
-      <a-asset-item id="lotusModel" src="./Lotus.gltf"></a-asset-item>
-      <a-asset-item id="sheshnagModel" src="./sheshnag.glb"></a-asset-item>
-    </a-assets>
+  <!-- HTML Narrative Subtitles Overlay -->
+  <div id="narration-overlay">Scan the marker to begin...</div>
 
-    <a-light type="directional" position="1 2 2" intensity="2" />
+  <div></div>
 
-    <a-light type="ambient" intensity="1" />
+  <!-- AR Scene Container -->
+  <a-scene
+    mindar-image="imageTargetSrc: ./qr-target.mind; autoStart: true; uiLoading: yes; uiScanning: yes; uiError: yes;"
+    embedded color-space="sRGB" renderer="colorManagement: true; physicallyCorrectLights: true"
+    vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
 
-    <a-camera position="0 0 0" look-controls="enabled: false" />
+    <!-- <a-assets>
+      
+        AUDIO ASSETS SPECIFICATION:
+        Place these audio files in your project directory next to index.html.
+        You can use standard .mp3 or .wav formats.
+      
+      Continuous atmospheric background theme (Rain, storm, or flute)
+
+      Voiceover / SFX clips mapped to respective storyline intervals
+      <audio id="audio-step1" src="narration_mathura.wav" preload="auto"></audio>
+      <audio id="audio-step2" src="narration_krishna_born.wav" preload="auto"></audio>
+      <audio id="audio-step3" src="narration_safety.wav" preload="auto"></audio>
+      <audio id="audio-step4" src="narration_yamuna.wav" preload="auto"></audio>
+      <audio id="audio-step5" src="narration_sheshnag.wav" preload="auto"></audio>
+      <audio id="audio-step6" src="narration_gokul.wav" preload="auto"></audio>
+      <audio id="audio-step7" src="narration_greetings.wav" preload="auto"></audio>
+    </a-assets> -->
+
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
     <a-entity mindar-image-target="targetIndex: 0" id="ar-target">
-      <a-box position="0 0 0" scale="0.2 0.2 0.2" color="yellow" />
 
-      <a-gltf-model rotation="0 0 0 " position="0.5 2 0.5" scale="0.005 0.005 0.005" src="#avatarModel" animation="property: position; to: 0 0.1 0.1; dur: 1000; easing: easeInOutQuad; loop: true; dir: alternate">
-      <a-gltf-model rotation="0 0 0 " position="0 1 0" scale="3 3 3" src="#lotusModel">
-      
-      <a-entity id="lotus1" gltf-model="url(./Lotus.gltf)" position="0 1 0" rotation="-90 0 0" scale="2 2 2" />
-    
-      <a-entity id="lotus2" gltf-model="#lotusModel" position="2 1 0" rotation="-90 0 0" scale="3 3 3" />
+      <!-- AUDIO PLAYER ENTITIES -->
+      <!-- Ambient track loops continuously when target is visible -->
+      <a-sound id="sound-narration" volume="2.0"></a-sound>
+      <!-- <a-sound id="narration1" src="src: url(./audio/narration_1.mp3)" volume="3.0"></a-sound>
+      <a-sound id="narration2" src="./audio/narration_2.mp3" volume="3.0"></a-sound>
+      <a-sound id="narration3" src="url(./audio/narration_3.mp3)" volume="3.0"></a-sound> -->
+
+      <!-- Global Ambient Lighting system controlled dynamically via intervals -->
+      <a-light id="ambient-light" type="ambient" color="#444444" intensity="1.0"></a-light>
+
+      <!-- CONTAINER CONTAINER FOR THE DINAMIC STORM RAIN PARTICLES -->
+      <a-entity id="rain-container"></a-entity>
+
+      <!-- Stormy Dark Clouds Backdrop -->
+      <!-- <a-circle position="0 0.8 -0.2" radius="0.7" color="#2F4F4F"
+        material="opacity: 0.5; transparent: true; shader: flat;">
+      </a-circle> -->
+
+      <!-- Sheshnag Umbrella -->
+      <a-entity id="sheshnag-umbrella" position="0 2 0" scale="2 2 2" rotation="0 0 0" gltf-model="url(./models/sheshnag.glb);" visible="false">
+      </a-entity>
+
+      <!-- Divine Glow -->
+      <a-circle id="divine-glow" position="0 1.5 0.01" radius="0.4" color="#FFD700"
+        material="shader: flat; opacity: 0.7; transparent: true;"
+        animation="property: scale; from: 1 1 1; to: 1.2 1.2 1; dur: 1000; dir: alternate; easing: easeInOutSine; loop: true;">
+      </a-circle>
+
+      <!-- Yamuna Water Backdrop -->
+      <a-circle id="yamuna-water" position="0 -0.75 -0.25" radius="4" color="#1E90FF" visible="false"
+        material="shader: flat; opacity: 0.5; transparent: true;"
+        animation="property: rotation; from: 0 0 0; to: 0 0 360; dur: 10000; easing: linear; loop: true;">
+      </a-circle>
+
+      <!-- Floating Lotus -->
+      <a-entity class="floating-lotus" position="0 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);" visible="false"></a-entity>
+      <a-entity class="floating-lotus" position="1 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);" visible="false"></a-entity>
+      <a-entity class="floating-lotus" position="-1 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);" visible="false"></a-entity>
+      <a-entity class="floating-lotus" position="0.5 -2.5 0.25" scale="0.5 0.5 0.5" gltf-model="url(./models/lotus.glb);" visible="false"></a-entity>
     </a-entity>
+
   </a-scene>
 
-  <!-- UI State Control Script -->
+  <!-- CORE AR RUNTIME SCRIPT -->
   <script>
-    const targetEntity = document.querySelector('#ar-target');
+    // DOM Element Cache Selectors
+    const target = document.querySelector("#ar-target");
+    const narrationOverlay = document.querySelector("#narration-overlay");
+    const ambientLight = document.querySelector("#ambient-light");
+    const rainContainer = document.querySelector("#rain-container");
 
-    targetEntity.addEventListener("targetFound", () => {
-      console.log("Found the target");
-      overlay.classList.add('hidden');
-    });
+    // Element Visibility Toggles
+    const divineGlow = document.querySelector("#divine-glow");
+    const yamunaWater = document.querySelector("#yamuna-water");
+    const sheshnagUmbrella = document.querySelector("#sheshnag-umbrella");
+    const floatingLotus = document.querySelectorAll(".floating-lotus");
+
+    // Audio System Components
+    // const soundBg = document.querySelector("#sound-bg");
+    const soundNarration = document.querySelector("#sound-narration");
+    // const soundSfx = document.querySelector("#sound-sfx");
+
+    // Runtime State Engine Properties
+    let timelineInterval = null;
+    let lightningInterval = null;
+    let startTime = null;
+    let rainGenerated = false;
+    let lastPlayedStep = -1;
+
+    // Calculates current timeline runtime state
+    const getElapsedSeconds = () => {
+      if (!startTime) return 0;
+      return (Date.now() - startTime) / 1000;
+    };
+
+    // Triggers fresh voiceover file only when step state increments
+    const playNarrationAudio = (step) => {
+      if (step === lastPlayedStep) return;
+      lastPlayedStep = step;
+
+      // Stop any ongoing narration immediately before switching clips
+      soundNarration.components.sound.stopSound();
+
+      if (step >= 1 && step <= 7) {
+        // Dynamically route the audio pool selector ID
+        // soundNarration.setAttribute("src", `#audio-step1`);
+        const audioUrl = `src: url(./audio/narration_${step}.wav)`;
+        soundNarration.setAttribute("src", audioUrl);
+
+        // Allow elements a microscopic pause to register the attribute buffer switch safely
+        setTimeout(() => {
+          soundNarration.components.sound.playSound();
+        }, 10);
+      }
+    };
+
+    // Generates structural procedural rain grid loop
+    const generateRainGrid = () => {
+      if (rainGenerated) return;
+      rainContainer.innerHTML = ''; // Sanitize container
+
+      for (let i = 0; i < 15; i++) {
+        const posX = (Math.random() - 0.5) * 1.5;
+        const posZ = (Math.random() - 0.5) * 0.5;
+        const delay = Math.random() * 2000;
+
+        const drop = document.createElement('a-box');
+        drop.setAttribute('position', `${posX} 1.5 ${posZ}`);
+        drop.setAttribute('width', '0.006');
+        drop.setAttribute('height', '0.2');
+        drop.setAttribute('depth', '0.006');
+        drop.setAttribute('color', '#A0C4DF');
+        drop.setAttribute('material', 'opacity: 0.4; transparent: true; shader: flat;');
+        drop.setAttribute('animation', `
+          property: position;
+          to: ${posX} -0.8 ${posZ};
+          dur: 1000;
+          loop: true;
+          easing: linear;
+          delay: ${delay};
+        `);
+        rainContainer.appendChild(drop);
+      }
+      rainGenerated = true;
+    };
+
+    const clearRainGrid = () => {
+      rainContainer.innerHTML = '';
+      rainGenerated = false;
+    };
+
+    // Handles rendering standard lighting shifts alongside lighting pulses
+    const updateLightingAndVisibility = (storyStep, isLightningFlash = false) => {
+      // 1. Manage Active Flash Elements
+      if (isLightningFlash) {
+        ambientLight.setAttribute("color", "#ffffff");
+        ambientLight.setAttribute("intensity", "3.5");
+        return;
+      }
+
+      // 2. Fallback to Baseline Narrative Atmosphere Luminescence
+      if (storyStep >= 1 && storyStep <= 5) {
+        ambientLight.setAttribute("color", "#111122");
+        ambientLight.setAttribute("intensity", "1.0");
+      } else {
+        ambientLight.setAttribute("color", "#444444");
+        ambientLight.setAttribute("intensity", "1.0");
+      }
+
+      // 3. Structural Asset Step Rendering Switches
+      // divineGlow.setAttribute("visible", storyStep >= 3);
+      yamunaWater.setAttribute("visible", storyStep >= 4);
+      sheshnagUmbrella.setAttribute("visible", storyStep >= 5);
+      // floatingLotus.setAttribute("visible", storyStep === 7);
+
+      floatingLotus.forEach(el => {
+        el.setAttribute("visible", storyStep === 7);
+      });
+
+      // 4. Procedural Storm Rain Toggle Lifecycle
+      if (storyStep >= 2 && storyStep <= 5) {
+        generateRainGrid();
+      } else {
+        clearRainGrid();
+      }
+    };
+
+    // Event Trigger Handlers
+    const onFound = () => {
+      console.log("🎯 Vasudeva target found!");
+      startTime = Date.now();
+      
+      lastPlayedStep = -1;
+      // Start ambient loop track smoothly
+      // soundBg.components.sound.playSound()
+
+      // Run the state timeline clock every 100ms for accurate transitions
+      timelineInterval = setInterval(() => {
+        const elapsedSeconds = getElapsedSeconds();
+        let currentStep = 0;
+        let text = "";
+
+        if (elapsedSeconds >= 0 && elapsedSeconds < 4) {
+          currentStep = 1;
+          text = "On a dark night in Mathura...";
+        } else if (elapsedSeconds >= 4 && elapsedSeconds < 8) {
+          currentStep = 2;
+          text = "Krishna was born to Devaki and Vasudeva.";
+        } else if (elapsedSeconds >= 8 && elapsedSeconds < 13) {
+          currentStep = 3;
+          text = "Vasudeva carried Krishna to safety.";
+        } else if (elapsedSeconds >= 13 && elapsedSeconds < 18) {
+          currentStep = 4;
+          text = "He crossed the mighty Yamuna...";
+        } else if (elapsedSeconds >= 18 && elapsedSeconds < 23) {
+          currentStep = 5;
+          text = "...while Sheshnag protected him from the rain.";
+        } else if (elapsedSeconds >= 23 && elapsedSeconds < 27) {
+          currentStep = 6; text = "And the divine child reached Gokul.";
+        } else if (elapsedSeconds >= 27 && elapsedSeconds <= 30) {
+          currentStep = 7; text = "Happy Janmashtami! ✨";
+        } else if (elapsedSeconds > 30) {
+          clearInterval(timelineInterval);
+          clearInterval(lightningInterval);
+          text = "Journey Complete. Rescan to replay.";
+          currentStep = 0;
+          // soundBg.components.sound.stopSound();
+        }
+        narrationOverlay.innerText = text;
+        playNarrationAudio(currentStep);
+        updateLightingAndVisibility(currentStep, false);
+      }, 100);
+
+      // Random Lightning Flash Generator (Runs every 3 seconds)
+      lightningInterval = setInterval(() => {
+        const elapsed = getElapsedSeconds();
+        // Active between Step 2 and Step 5 timeline window
+        if (elapsed >= 4 && elapsed < 23) {
+          if (Math.random() > 0.4) {
+            // Flash On Fire thunder sfx track instantly
+            soundSfx.components.sound.playSound();
+            updateLightingAndVisibility(null, true);
+            // Flash Off
+            setTimeout(() => {
+              const currentElapsed = getElapsedSeconds();
+              let step = 0;
+              if (currentElapsed >= 4 && currentElapsed < 8) step = 2;
+              else if (currentElapsed >= 8 && currentElapsed < 13) step = 3;
+              else if (currentElapsed >= 13 && currentElapsed < 18) step = 4;
+              else if (currentElapsed >= 18 && currentElapsed < 23) step = 5;
+              updateLightingAndVisibility(step, false);
+            }, 150);
+
+            if (Math.random() > 0.6) {
+              setTimeout(() => {
+                updateLightingAndVisibility(null, true);
+                setTimeout(() => {
+                  const currentElapsedInner = getElapsedSeconds();
+                  let stepInner = 0;
+                  if (currentElapsedInner >= 4 && currentElapsedInner < 8) stepInner = 2;
+                  else if (currentElapsedInner >= 8 && currentElapsedInner < 13) stepInner = 3;
+                  else if (currentElapsedInner >= 13 && currentElapsedInner < 18) stepInner = 4;
+                  else if (currentElapsedInner >= 18 && currentElapsedInner < 23) stepInner = 5;
+                  updateLightingAndVisibility(stepInner, false);
+
+                }, 100);
+              }, 250);
+            }
+          }
+        }
+      }, 3000);      
+    };
+
+    const onLost = () => {
+      console.log("❌ Vasudeva target lost!");
+      clearInterval(timelineInterval);
+      clearInterval(lightningInterval);
+
+      // Silence all active audio lines immediately when target leaves frame
+      // soundBg.components.sound.stopSound();
+      // soundSfx.components.sound.stopSound();
+      soundNarration.components.sound.stopSound();
+
+      narrationOverlay.innerText = "Target lost. Point back at the basket.";
+      clearRainGrid();
+      updateLightingAndVisibility(0, false);
+      lastPlayedStep = -1;
+    };
+
+    target.addEventListener("targetFound", onFound);
+    target.addEventListener("targetLost", onLost);
   </script>
-
 </body>
 
 </html>

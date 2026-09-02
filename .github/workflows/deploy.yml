@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - main # Set this to "master" if your repository's primary branch uses the old naming scheme
+      - master # Set this to "master" if your repository's primary branch uses the old naming scheme
 
 permissions:
   contents: read

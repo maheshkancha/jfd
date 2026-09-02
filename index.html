@@ -35,72 +35,50 @@
 
 <body>
 
-  <!-- Loading / Scanning UI Overlay -->
-  <div id="scanning-overlay">
-    <h2>🦚 Janmashtami WebAR 🦚</h2>
-    <p>Scan your tracking QR code to view the assets...</p>
-  </div>
-
-  <!-- AR Scene Setup pointing directly to your local file path structure -->
-  <a-scene mindar-image="imageTargetSrc: ./test-target.mind; uiLoading: no; uiScanning: no;" embedded color-space="sRGB"
-    renderer="colorManagement: true, physicallyCorrectLights: true" vr-mode-ui="enabled: false"
+  <a-scene mindar-image="
+        imageTargetSrc: ./test-target.mind;
+        autoStart: true;
+        uiLoading: yes;
+        uiScanning: yes;
+        uiError: yes;
+      " color-space="sRGB" renderer="colorManagement: true; physicallyCorrectLights: true" vr-mode-ui="enabled: false"
     device-orientation-permission-ui="enabled: false">
-
-    <a-assets>
-      <!-- 3D Model Assets -->
+    <a-assets timeout="10000">
       <a-asset-item id="lotusModel" src="lotus.glb"></a-asset-item>
       <a-asset-item id="sheshnagModel" src="sheshnag.glb"></a-asset-item>
     </a-assets>
 
-    <a-camera active="true" look-controls="enabled: false" wasd-controls="enabled: false"></a-camera>
+    <a-light type="directional" position="1 2 2" intensity="2" />
 
-    <!-- Ambient and Directional Lighting -->
-    <a-light type="ambient" color="#ffffff" intensity="1.2"></a-light>
-    <a-light type="directional" color="#fff" intensity="0.8" position="1 2 1"></a-light>
+    <a-light type="ambient" intensity="1" />
 
-    <!-- Target index 0 matches the image target compiled inside your file -->
+    <a-camera position="0 0 0" look-controls="enabled: false" />
+
     <a-entity mindar-image-target="targetIndex: 0" id="ar-target">
+      {/* Divine glow behind Krishna */}
+      {/* Real 3D Lotus */}
+      {/* Placeholder for Sheshnag */}
+      <a-box position="0 0 0" scale="0.2 0.2 0.2" color="yellow" />
 
-      <!-- THE BASKET, KRISHNA & MODELS GROUP -->
-
-      <!-- 1. The Basket (Wicker simulation) -->
-      <a-cylinder radius="0.5" height="0.2" open-ended="true" material="color: #8B5A2B; side: double; roughness: 0.8;">
-      </a-cylinder>
-      <a-cylinder radius="0.48" height="0.02" position="0 -0.1 0" material="color: #5C3A21; roughness: 0.9;">
-      </a-cylinder>
-
-      <!-- 2. Baby Krishna (Blue & Gold Figure) -->
-
-      <a-sphere radius="0.15" material="color: #4A90E2; metalness: 0.1; roughness: 0.5;"></a-sphere>
-      <a-cylinder radius="0.16" height="0.08" position="0 -0.05 0" material="color: #FFD700;"></a-cylinder>
-
-
-      <!-- 3. Your Custom Lotus Model -->
-      <a-gltf-model src="#lotusModel" position="0 -0.08 0" scale="0.3 0.3 0.3">
-      </a-gltf-model>
-
-      <!-- 4. Your Custom Sheshnag Model -->
-      <a-gltf-model src="#sheshnagModel" position="0 0.1 -0.3" rotation="0 180 0" scale="0.5 0.5 0.5">
-      </a-gltf-model>
+      <a-entity id="lotus" gltf-model="#lotusModel" position="0 0 0.1" rotation="-90 0 0" scale="1 1 1" />
     </a-entity>
-    
-
   </a-scene>
 
   <!-- UI State Control Script -->
   <script>
     const targetEntity = document.querySelector('#ar-target');
-    const overlay = document.querySelector('#scanning-overlay');
+    // const overlay = document.querySelector('#scanning-overlay');
 
     // Hide overlay text when the image target is actively tracked
     targetEntity.addEventListener("targetFound", () => {
+      console.log("Found the target");
       overlay.classList.add('hidden');
     });
 
     // Show overlay text again if the camera loses track of the card
-    targetEntity.addEventListener("targetLost", () => {
-      overlay.classList.remove('hidden');
-    });
+    // targetEntity.addEventListener("targetLost", () => {
+    //   overlay.classList.remove('hidden');
+    // });
   </script>
 
 </body>

@@ -60,12 +60,6 @@
 
     <a-entity mindar-image-target="targetIndex: 0" id="ar-target">
       <!-- Target index 0 matches the compilation sequence profile inside your .mind matrix -->
-      <a-entity scale="4 4 4" rotation="-90 0 0" position="0 -10 0" gltf-model="url(./models/lotus.glb);">
-      </a-entity>
-
-      <a-entity scale="3 3 3" rotation="-90 0 0" position="0 0 0" gltf-model="url(./models/sheshnag.glb);">
-      </a-entity>
-
       <!-- Global Ambient Lighting system controlled dynamically via intervals -->
       <a-light id="ambient-light" type="ambient" color="#444444" intensity="1.0"></a-light>
 
@@ -88,16 +82,23 @@
         animation="property: rotation; from: 0 0 0; to: 0 0 360; dur: 10000; easing: linear; loop: true;">
       </a-circle>
 
-      <!-- STEP 5+: Sheshnag Umbrella (Green Torus Knot Above) -->
-      <a-torus-knot id="sheshnag-umbrella" position="0 0.4 0" radius="0.15" radius-tubular="0.03" color="#228B22"
+      <!-- STEP 5+: Sheshnag Umbrella -->
+      <a-entity id="sheshnag-umbrella" scale="3 3 3" rotation="0 0 0" position="0 0 0" visible="false"
+        gltf-model="url(./models/sheshnag.glb);">
+      </a-entity>
+      <!-- <a-torus-knot id="sheshnag-umbrella" position="0 0.4 0" radius="0.15" radius-tubular="0.03" color="#228B22"
         visible="false"
         animation="property: rotation; from: 0 0 0; to: 0 360 0; dur: 4000; easing: linear; loop: true;">
-      </a-torus-knot>
+      </a-torus-knot> -->
 
       <!-- STEP 7: Floating Lotus (Pink Sphere) -->
-      <a-sphere id="floating-lotus" position="-0.35 -0.25 0" radius="0.08" color="#FF69B4" visible="false"
+      <a-entity id="floating-lotus" position="-0.35 -0.25 0" scale="4 4 4" rotation="0 0 0" visible="false"
+        gltf-model="url(./models/lotus.glb);"
         animation="property: position; from: -0.35 -0.25 0; to: -0.35 -0.15 0; dur: 1500; dir: alternate; easing: easeInOutSine; loop: true;">
-      </a-sphere>
+      </a-entity>
+      <!-- <a-sphere id="floating-lotus" position="-0.35 -0.25 0" radius="0.08" color="#FF69B4" visible="false"
+        animation="property: position; from: -0.35 -0.25 0; to: -0.35 -0.15 0; dur: 1500; dir: alternate; easing: easeInOutSine; loop: true;">
+      </a-sphere> -->
     </a-entity>
 
   </a-scene>

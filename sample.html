@@ -53,52 +53,52 @@
   <!-- AR Scene Container -->
   <a-scene
     mindar-image="imageTargetSrc: ./hiro-target.mind; autoStart: true; uiLoading: yes; uiScanning: yes; uiError: yes;"
-    embedded color-space="sRGB"
-    renderer="colorManagement: true; physicallyCorrectLights: true"
-    vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: false">
+    embedded color-space="sRGB" renderer="colorManagement: true; physicallyCorrectLights: true"
+    vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    <!-- Target index 0 matches the compilation sequence profile inside your .mind matrix -->
+    <a-entity mindar-image-target="targetIndex: 0" id="ar-target">
+      <!-- Target index 0 matches the compilation sequence profile inside your .mind matrix -->
       <a-entity scale="4 4 4" rotation="-90 0 0" position="0 -10 0" gltf-model="url(./models/lotus.glb);">
       </a-entity>
 
       <a-entity scale="3 3 3" rotation="-90 0 0" position="0 0 0" gltf-model="url(./models/sheshnag.glb);">
       </a-entity>
 
-    <!-- Global Ambient Lighting system controlled dynamically via intervals -->
-    <a-light id="ambient-light" type="ambient" color="#444444" intensity="1.0"></a-light>
+      <!-- Global Ambient Lighting system controlled dynamically via intervals -->
+      <a-light id="ambient-light" type="ambient" color="#444444" intensity="1.0"></a-light>
 
-    <!-- CONTAINER CONTAINER FOR THE DINAMIC STORM RAIN PARTICLES -->
+      <!-- CONTAINER CONTAINER FOR THE DINAMIC STORM RAIN PARTICLES -->
 
-    <!-- Stormy Dark Clouds Backdrop -->
-    <a-circle position="0 0.8 -0.2" radius="0.7" color="#2F4F4F"
-      material="opacity: 0.5; transparent: true; shader: flat;">
-    </a-circle>
+      <!-- Stormy Dark Clouds Backdrop -->
+      <a-circle position="0 0.8 -0.2" radius="0.7" color="#2F4F4F"
+        material="opacity: 0.5; transparent: true; shader: flat;">
+      </a-circle>
 
-    <!-- STEP 3+: Divine Glow (Baby Krishna Placeholder) -->
-    <a-circle id="divine-glow" position="0 0 0.01" radius="0.4" color="#FFD700" visible="false"
-      material="shader: flat; opacity: 0.7; transparent: true;"
-      animation="property: scale; from: 1 1 1; to: 1.2 1.2 1; dur: 1000; dir: alternate; easing: easeInOutSine; loop: true;">
-    </a-circle>
+      <!-- STEP 3+: Divine Glow (Baby Krishna Placeholder) -->
+      <a-circle id="divine-glow" position="0 0 0.01" radius="0.4" color="#FFD700" visible="false"
+        material="shader: flat; opacity: 0.7; transparent: true;"
+        animation="property: scale; from: 1 1 1; to: 1.2 1.2 1; dur: 1000; dir: alternate; easing: easeInOutSine; loop: true;">
+      </a-circle>
 
-    <!-- STEP 4+: Yamuna Water Backdrop (Blue Circle behind Krishna) -->
-    <a-circle id="yamuna-water" position="0 -0.1 -0.05" radius="0.6" color="#1E90FF" visible="false"
-      material="shader: flat; opacity: 0.4; transparent: true;"
-      animation="property: rotation; from: 0 0 0; to: 0 0 360; dur: 10000; easing: linear; loop: true;">
-    </a-circle>
+      <!-- STEP 4+: Yamuna Water Backdrop (Blue Circle behind Krishna) -->
+      <a-circle id="yamuna-water" position="0 -0.1 -0.05" radius="0.6" color="#1E90FF" visible="false"
+        material="shader: flat; opacity: 0.4; transparent: true;"
+        animation="property: rotation; from: 0 0 0; to: 0 0 360; dur: 10000; easing: linear; loop: true;">
+      </a-circle>
 
-    <!-- STEP 5+: Sheshnag Umbrella (Green Torus Knot Above) -->
-    <a-torus-knot id="sheshnag-umbrella" position="0 0.4 0" radius="0.15" radius-tubular="0.03" color="#228B22"
-      visible="false" animation="property: rotation; from: 0 0 0; to: 0 360 0; dur: 4000; easing: linear; loop: true;">
-    </a-torus-knot>
+      <!-- STEP 5+: Sheshnag Umbrella (Green Torus Knot Above) -->
+      <a-torus-knot id="sheshnag-umbrella" position="0 0.4 0" radius="0.15" radius-tubular="0.03" color="#228B22"
+        visible="false"
+        animation="property: rotation; from: 0 0 0; to: 0 360 0; dur: 4000; easing: linear; loop: true;">
+      </a-torus-knot>
 
-    <!-- STEP 7: Floating Lotus (Pink Sphere) -->
-    <a-sphere id="floating-lotus" position="-0.35 -0.25 0" radius="0.08" color="#FF69B4" visible="false"
-      animation="property: position; from: -0.35 -0.25 0; to: -0.35 -0.15 0; dur: 1500; dir: alternate; easing: easeInOutSine; loop: true;">
-    </a-sphere>
-
+      <!-- STEP 7: Floating Lotus (Pink Sphere) -->
+      <a-sphere id="floating-lotus" position="-0.35 -0.25 0" radius="0.08" color="#FF69B4" visible="false"
+        animation="property: position; from: -0.35 -0.25 0; to: -0.35 -0.15 0; dur: 1500; dir: alternate; easing: easeInOutSine; loop: true;">
+      </a-sphere>
+    </a-entity>
 
   </a-scene>
 
@@ -286,5 +286,6 @@
     target.addEventListener("targetFound", onFound);
     target.addEventListener("targetLost", onLost);
   </script>
-  </body>
+</body>
+
 </html>

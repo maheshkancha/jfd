@@ -63,7 +63,6 @@
         You can use standard .mp3 or .wav formats.
       
       Continuous atmospheric background theme (Rain, storm, or flute)
-      <audio id="bg-thunder-theme" src="ambient_storm_theme.mp3" preload="auto"></audio>
 
       Voiceover / SFX clips mapped to respective storyline intervals
       <audio id="audio-step1" src="narration_mathura.wav" preload="auto"></audio>
@@ -73,9 +72,6 @@
       <audio id="audio-step5" src="narration_sheshnag.wav" preload="auto"></audio>
       <audio id="audio-step6" src="narration_gokul.wav" preload="auto"></audio>
       <audio id="audio-step7" src="narration_greetings.wav" preload="auto"></audio>
-
-      Positional Lightning crack audio effect
-      <audio id="audio-lightning" src="lightning_crack.mp3" preload="auto"></audio>
     </a-assets> -->
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -84,46 +80,42 @@
 
       <!-- AUDIO PLAYER ENTITIES -->
       <!-- Ambient ambient track loops continuously when target is visible -->
-      <a-sound id="sound-bg" src="#bg-thunder-theme" loop="true" volume="0.4" autoplay="false"></a-sound>
       <a-sound id="sound-narration" volume="2.0"></a-sound>
-      <a-sound id="narration1" src="src: url(./audio/narration_1.mp3)" volume="3.0"></a-sound>
+      <!-- <a-sound id="narration1" src="src: url(./audio/narration_1.mp3)" volume="3.0"></a-sound>
       <a-sound id="narration2" src="./audio/narration_2.mp3" volume="3.0"></a-sound>
-      <a-sound id="narration3" src="url(./audio/narration_3.mp3)" volume="3.0"></a-sound>
-      <!-- Specific lightning thunder clap impact channel -->
-      <a-sound id="sound-sfx" src="#audio-lightning" volume="1.5"></a-sound>
-
+      <a-sound id="narration3" src="url(./audio/narration_3.mp3)" volume="3.0"></a-sound> -->
 
       <!-- Global Ambient Lighting system controlled dynamically via intervals -->
-      <a-light id="ambient-light" type="ambient" color="#444444" intensity="1.0"></a-light>
+      <!-- <a-light id="ambient-light" type="ambient" color="#444444" intensity="1.0"></a-light> -->
 
       <!-- CONTAINER CONTAINER FOR THE DINAMIC STORM RAIN PARTICLES -->
-      <div id="rain-container"></div>
+      <a-entity id="rain-container"></a-entity>
 
       <!-- Stormy Dark Clouds Backdrop -->
       <!-- <a-circle position="0 0.8 -0.2" radius="0.7" color="#2F4F4F"
         material="opacity: 0.5; transparent: true; shader: flat;">
       </a-circle> -->
 
+      <!-- Sheshnag Umbrella -->
+      <a-entity position="0 1.8 0" scale="2 2 2" rotation="0 0 0" gltf-model="url(./models/sheshnag.glb);" visible="false"></a-entity>
+
       <!-- Divine Glow -->
-      <a-circle id="divine-glow" position="0 1 0.01" radius="0.4" color="#FFD700" visible="false"
+      <a-circle id="divine-glow" position="0 1.5 0.01" radius="0.4" color="#FFD700"
         material="shader: flat; opacity: 0.7; transparent: true;"
         animation="property: scale; from: 1 1 1; to: 1.2 1.2 1; dur: 1000; dir: alternate; easing: easeInOutSine; loop: true;">
       </a-circle>
 
       <!-- Yamuna Water Backdrop -->
-      <a-circle id="yamuna-water" position="0 -0.1 -0.25" radius="4" color="#1E90FF" visible="false"
+      <a-circle id="yamuna-water" position="0 -1.5 -0.25" radius="4" color="#1E90FF" visible="false"
         material="shader: flat; opacity: 0.4; transparent: true;"
         animation="property: rotation; from: 0 0 0; to: 0 0 360; dur: 10000; easing: linear; loop: true;">
       </a-circle>
 
-      <!-- Sheshnag Umbrella -->
-      <a-entity position="0 2 0" scale="2 2 2" rotation="0 0 0" gltf-model="url(./models/sheshnag.glb);">
-      </a-entity>
-
       <!-- Floating Lotus -->
-      <a-entity position="0 -2.5 0" scale="2 2 2" rotation="0 0 0" gltf-model="url(./models/lotus.glb);">
-      </a-entity>
-
+      <a-entity class="floating-lotus" position="0 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);"></a-entity>
+      <a-entity class="floating-lotus" position="1 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);"></a-entity>
+      <a-entity class="floating-lotus" position="-1 -2.5 0.25" scale="1 1 1" gltf-model="url(./models/lotus.glb);"></a-entity>
+      <a-entity class="floating-lotus" position="0.5 -2.5 0.25" scale="0.5 0.5 0.5" gltf-model="url(./models/lotus.glb);"></a-entity>
     </a-entity>
 
   </a-scene>
@@ -140,7 +132,7 @@
     const divineGlow = document.querySelector("#divine-glow");
     const yamunaWater = document.querySelector("#yamuna-water");
     const sheshnagUmbrella = document.querySelector("#sheshnag-umbrella");
-    const floatingLotus = document.querySelector("#floating-lotus");
+    const floatingLotus = document.querySelector(".floating-lotus");
 
     // Audio System Components
     const soundBg = document.querySelector("#sound-bg");
@@ -235,10 +227,10 @@
       }
 
       // 3. Structural Asset Step Rendering Switches
-      divineGlow.setAttribute("visible", storyStep >= 3);
-      yamunaWater.setAttribute("visible", storyStep >= 4);
-      sheshnagUmbrella.setAttribute("visible", storyStep >= 5);
-      floatingLotus.setAttribute("visible", storyStep === 7);
+      // divineGlow.setAttribute("visible", storyStep >= 1);
+      yamunaWater.setAttribute("visible", storyStep >= 3);
+      sheshnagUmbrella.setAttribute("visible", storyStep >= 4);
+      floatingLotus.setAttribute("visible", storyStep >= 5);
 
       // 4. Procedural Storm Rain Toggle Lifecycle
       if (storyStep >= 2 && storyStep <= 5) {

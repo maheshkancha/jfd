@@ -56,16 +56,16 @@
     embedded color-space="sRGB" renderer="colorManagement: true; physicallyCorrectLights: true"
     vr-mode-ui="enabled: false" device-orientation-permission-ui="enabled: false">
 
-    <a-assets>
-      <!-- 
+    <!-- <a-assets>
+      
         AUDIO ASSETS SPECIFICATION:
         Place these audio files in your project directory next to index.html.
         You can use standard .mp3 or .wav formats.
-      -->
-      <!-- Continuous atmospheric background theme (Rain, storm, or flute) -->
-      <!-- <audio id="bg-thunder-theme" src="ambient_storm_theme.mp3" preload="auto"></audio> -->
+      
+      Continuous atmospheric background theme (Rain, storm, or flute)
+      <audio id="bg-thunder-theme" src="ambient_storm_theme.mp3" preload="auto"></audio>
 
-      <!-- Voiceover / SFX clips mapped to respective storyline intervals -->
+      Voiceover / SFX clips mapped to respective storyline intervals
       <audio id="audio-step1" src="narration_mathura.wav" preload="auto"></audio>
       <audio id="audio-step2" src="narration_krishna_born.wav" preload="auto"></audio>
       <audio id="audio-step3" src="narration_safety.wav" preload="auto"></audio>
@@ -74,9 +74,9 @@
       <audio id="audio-step6" src="narration_gokul.wav" preload="auto"></audio>
       <audio id="audio-step7" src="narration_greetings.wav" preload="auto"></audio>
 
-      <!-- Positional Lightning crack audio effect -->
+      Positional Lightning crack audio effect
       <audio id="audio-lightning" src="lightning_crack.mp3" preload="auto"></audio>
-    </a-assets>
+    </a-assets> -->
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
@@ -168,7 +168,8 @@
       if (step >= 1 && step <= 7) {
         // Dynamically route the audio pool selector ID
         // soundNarration.setAttribute("src", `#audio-step1`);
-        soundNarration.setAttribute("src", `#audio-step${step}`);
+        const audioUrl = `src: url(./audio/narration_${step}.wav)`;
+        soundNarration.setAttribute("src", audioUrl);
 
         // Allow elements a microscopic pause to register the attribute buffer switch safely
         setTimeout(() => {

@@ -48,7 +48,7 @@
 <body>
 
   <!-- HTML Narrative Subtitles Overlay -->
-  <div id="narration-overlay">Scan the basket target to begin...</div>
+  <div id="narration-overlay">Scan the marker to begin...</div>
 
   <!-- AR Scene Container -->
   <a-scene
@@ -86,6 +86,7 @@
       <!-- Ambient ambient track loops continuously when target is visible -->
       <a-sound id="sound-bg" src="#bg-thunder-theme" loop="true" volume="0.4" autoplay="false"></a-sound>
       <a-sound id="sound-narration" volume="2.0"></a-sound>
+      <a-sound id="narration" src="src: url(./audio/narration_1.wav)" volume="3.0"></a-sound>
       <!-- Specific lightning thunder clap impact channel -->
       <a-sound id="sound-sfx" src="#audio-lightning" volume="1.5"></a-sound>
 
@@ -97,9 +98,9 @@
       <div id="rain-container"></div>
 
       <!-- Stormy Dark Clouds Backdrop -->
-      <a-circle position="0 0.8 -0.2" radius="0.7" color="#2F4F4F"
+      <!-- <a-circle position="0 0.8 -0.2" radius="0.7" color="#2F4F4F"
         material="opacity: 0.5; transparent: true; shader: flat;">
-      </a-circle>
+      </a-circle> -->
 
       <!-- Divine Glow (Baby Krishna Placeholder) -->
       <a-circle id="divine-glow" position="0 0 0.01" radius="0.4" color="#FFD700" visible="false"

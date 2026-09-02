@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Janmashtami AR Fancy Dress - Target Tracking</title>
+  <script src="https://aframe.io/releases/1.4.2/aframe.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
+  <style>
+    /* UI overlay for when the experience is loading or tracking is lost */
+    #scanning-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      font-family: sans-serif;
+      pointer-events: none;
+    }
+
+    .hidden {
+      display: none !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Loading / Scanning UI Overlay -->
+  <div id="scanning-overlay">
+    <h2>🦚 Janmashtami WebAR 🦚</h2>
+    <p>Scan your tracking QR code to view the assets...</p>
+  </div>
+
+  <!-- AR Scene Setup pointing directly to your local file path structure -->
+  <a-scene mindar-image="imageTargetSrc: ./test-target.mind; uiLoading: no; uiScanning: no;" embedded color-space="sRGB"
+    renderer="colorManagement: true, physicallyCorrectLights: true" vr-mode-ui="enabled: false"
+    device-orientation-permission-ui="enabled: false">
+
+    <a-assets>
+      <!-- 3D Model Assets -->
+      <a-asset-item id="lotusModel" src="lotus.glb"></a-asset-item>
+      <a-asset-item id="sheshnagModel" src="sheshnag.glb"></a-asset-item>
+    </a-assets>
+
+    <a-camera active="true" look-controls="enabled: false" wasd-controls="enabled: false"></a-camera>
+
+    <!-- Ambient and Directional Lighting -->
+    <a-light type="ambient" color="#ffffff" intensity="1.2"></a-light>
+    <a-light type="directional" color="#fff" intensity="0.8" position="1 2 1"></a-light>
+
+    <!-- Target index 0 matches the image target compiled inside your file -->
+    <a-entity mindar-image-target="targetIndex: 0" id="ar-target">
+
+      <!-- THE BASKET, KRISHNA & MODELS GROUP -->
+
+      <!-- 1. The Basket (Wicker simulation) -->
+      <a-cylinder radius="0.5" height="0.2" open-ended="true" material="color: #8B5A2B; side: double; roughness: 0.8;">
+      </a-cylinder>
+      <a-cylinder radius="0.48" height="0.02" position="0 -0.1 0" material="color: #5C3A21; roughness: 0.9;">
+      </a-cylinder>
+
+      <!-- 2. Baby Krishna (Blue & Gold Figure) -->
+
+      <a-sphere radius="0.15" material="color: #4A90E2; metalness: 0.1; roughness: 0.5;"></a-sphere>
+      <a-cylinder radius="0.16" height="0.08" position="0 -0.05 0" material="color: #FFD700;"></a-cylinder>
+
+
+      <!-- 3. Your Custom Lotus Model -->
+      <a-gltf-model src="#lotusModel" position="0 -0.08 0" scale="0.3 0.3 0.3">
+      </a-gltf-model>
+
+      <!-- 4. Your Custom Sheshnag Model -->
+      <a-gltf-model src="#sheshnagModel" position="0 0.1 -0.3" rotation="0 180 0" scale="0.5 0.5 0.5">
+      </a-gltf-model>
+    </a-entity>
+    
+
+  </a-scene>
+
+  <!-- UI State Control Script -->
+  <script>
+    const targetEntity = document.querySelector('#ar-target');
+    const overlay = document.querySelector('#scanning-overlay');
+
+    // Hide overlay text when the image target is actively tracked
+    targetEntity.addEventListener("targetFound", () => {
+      overlay.classList.add('hidden');
+    });
+
+    // Show overlay text again if the camera loses track of the card
+    targetEntity.addEventListener("targetLost", () => {
+      overlay.classList.remove('hidden');
+    });
+  </script>
+
+</body>
+
+</html>

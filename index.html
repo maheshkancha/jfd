@@ -187,12 +187,12 @@
         const delay = Math.random() * 2000;
 
         const drop = document.createElement('a-box');
-        drop.setAttribute('position', `${posX} 1.5 ${posZ}`);
+        drop.setAttribute('position', `${posX} 2.5 ${posZ}`);
         drop.setAttribute('width', '0.006');
         drop.setAttribute('height', '0.2');
         drop.setAttribute('depth', '0.006');
         drop.setAttribute('color', '#A0C4DF');
-        drop.setAttribute('material', 'opacity: 0.4; transparent: true; shader: flat;');
+        drop.setAttribute('material', 'opacity: 0.5; transparent: true; shader: flat;');
         drop.setAttribute('animation', `
           property: position;
           to: ${posX} -0.8 ${posZ};
